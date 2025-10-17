@@ -92,7 +92,7 @@ def order():
             product_id = item.get("product")
             quantity = item.get("quantity", 1)
             name = item_mapping.get(product_id, "不明な商品")
-            item_lines.append(f">> {name}: {quantity}")
+            item_lines.append(f"> {name}: {quantity}")
 
         item_text = "\n".join(item_lines)
         message = f"{header}\n\n{item_text}"
