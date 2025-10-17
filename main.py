@@ -64,6 +64,14 @@ def order():
         return jsonify({"error": "Invalid order format"}), 400
     
     try:
+        channel = client.get_channel(CHANNEL_ID)
+        if channel:
+            orderNumber = order_data.get("orderNumber")
+            tableNumber = order_data.get("tableNumber")
+            orderType = order_data.get("orderType")
+            customerCount = order_data.get("customerCount")
+            message = f">>> 通し番号: **{orderNumber}**\nTableNumber: **{tableNumber}**\nOrderType: **{orderType}**\n人数: **{customerCount}**"
+
         for item in order_data["items"]:
             product_id = item.get("product")
             quantity = item.get("quantity")
