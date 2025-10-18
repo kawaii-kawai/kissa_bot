@@ -4,6 +4,7 @@ import threading
 import discord
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from flask_cors import CORS  # ← 追加
 
 load_dotenv()
 
