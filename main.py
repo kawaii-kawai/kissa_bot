@@ -15,6 +15,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # ===== 商品マッピング =====
 item_mapping = {
