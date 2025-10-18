@@ -56,7 +56,7 @@ def notify():
         if channel:
             await channel.send(f"🔔 API通知: {text}")
 
-    client.loop.create_task(send_message())
+    asyncio.run_coroutine_threadsafe(send_message(), client.loop)
     return jsonify({"status": "ok", "message": text})
 
 
@@ -105,7 +105,7 @@ def order():
             print(f"⚠️ Failed to send message: {e}")
 
     # 非同期処理として送信
-    client.loop.create_task(send_order())
+    asyncio.run_coroutine_threadsafe(send_order(), client.loop)
     return jsonify({"message": "Order sent to Discord"}), 200
 
 
