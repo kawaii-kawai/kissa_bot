@@ -81,6 +81,7 @@ def order():
         customerCount = order_data.get("customerCount", "N/A")
 
         header = (
+            f"@everyone\n"
             f"🧾 **新しい注文を受け付けました！**\n"
             f"> 通し番号: **{orderNumber}**\n"
             f"> 席番号: **{tableNumber}**\n"
