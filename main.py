@@ -84,7 +84,7 @@ def order():
         customerCount = order_data.get("customerCount", "N/A")
 
         header = (
-            f"@everyone\n"
+            f"@kawaii_kawai\n"
             f"🧾 **新しい注文を受け付けました！**\n"
             f"> 通し番号: **{orderNumber}**\n"
             f"> 席番号: **{tableNumber}**\n"
@@ -120,7 +120,7 @@ def order():
                     try:
                         utc_time = datetime.fromisoformat(created_at_str.replace("Z", "+00:00"))
                         jst_time = utc_time + timedelta(hours=9)
-                        time_str = jst_time.strftime("%Y-%m-%d %H:%M:%S")
+                        time_str = jst_time.strftime("%d %H:%M")
                     except Exception:
                         time_str = created_at_str
                 else:
