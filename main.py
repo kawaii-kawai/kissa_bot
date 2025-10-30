@@ -126,7 +126,7 @@ def order():
                 else:
                     time_str = "不明な時刻"
 
-                msg = f"☕ ドリップコーヒー注文: {coffee_count}個\n🕒 時刻（日本時間）: {time_str}"
+                msg = f"コーヒー注文: {coffee_count}個\n時刻: {time_str}"
                 try:
                     await coffee_channel.send(msg)
                 except Exception as e:
