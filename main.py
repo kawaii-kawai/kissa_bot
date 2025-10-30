@@ -5,6 +5,7 @@ import discord
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS  # ← 追加
+from datetime import datetime, timedelta
 
 load_dotenv()
 
@@ -32,6 +33,8 @@ item_mapping = {
     "686a7d98cbfdbb7438d74e83": "紅茶（ホット）",
     "68d7563169cb686cf32bff58": "アイスコーヒー",
 }
+
+COFFEE_CHANNEL = 1433338797810253904
 
 # ===== Discordイベント =====
 @client.event
@@ -91,11 +94,14 @@ def order():
 
         # --- 商品リスト ---
         item_lines = []
+        coffee_count = 0
         for item in order_data["items"]:
             product_id = item.get("product")
             quantity = item.get("quantity", 1)
             name = item_mapping.get(product_id, "不明な商品")
             item_lines.append(f"> {name}: {quantity}")
+            if name == "ドリップコーヒー":
+                coffee_count += quantity
 
         item_text = "\n".join(item_lines)
         message = f"{header}\n\n{item_text}"
@@ -104,6 +110,28 @@ def order():
             await channel.send(message)
         except Exception as e:
             print(f"⚠️ Failed to send message: {e}")
+        
+        if coffee_count > 0:
+            coffee_channel = client.get_channel(COFFEE_CHANNEL)
+            if coffee_channel:
+                created_at_str = order_data.get("createdAt")
+                if created_at_str:
+                    # UTC → 日本時間 (JST = UTC+9)
+                    try:
+                        utc_time = datetime.fromisoformat(created_at_str.replace("Z", "+00:00"))
+                        jst_time = utc_time + timedelta(hours=9)
+                        time_str = jst_time.strftime("%Y-%m-%d %H:%M:%S")
+                    except Exception:
+                        time_str = created_at_str
+                else:
+                    time_str = "不明な時刻"
+
+                msg = f"☕ ドリップコーヒー注文: {coffee_count}個\n🕒 時刻（日本時間）: {time_str}"
+                try:
+                    await coffee_channel.send(msg)
+                except Exception as e:
+                    print(f"⚠️ Failed to send coffee info: {e}")
+
 
     # 非同期処理として送信
     asyncio.run_coroutine_threadsafe(send_order(), client.loop)
